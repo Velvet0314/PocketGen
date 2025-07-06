@@ -39,21 +39,33 @@ def from_protein_ligand_dicts(protein_dict=None, ligand_dict=None, residue_dict=
 
 class PocketLigandPairDataset(Dataset):
 
-    def __init__(self, raw_path, transform=None):
+    def __init__(self, raw_path, transform=None, skip_process=False):
         super().__init__()
-        self.raw_path = raw_path.rstrip('/')
-        self.index_path = os.path.join(self.raw_path, 'index_seq.pkl')
-        self.processed_path = os.path.join(os.path.dirname(self.raw_path),
-                                           os.path.basename(self.raw_path) + '_processed.lmdb')
-        self.name2id_path = os.path.join(os.path.dirname(self.raw_path),
-                                         os.path.basename(self.raw_path) + '_name2id.pt')
+        if skip_process or raw_path.endswith('.lmdb'):
+            self.processed_path = raw_path
+            self.raw_path = None
+            self.index_path = None
+            self.name2id_path = None
+        else:
+            self.raw_path = raw_path
+            self.index_path = os.path.join(self.raw_path, 'index_seq.pkl')
+            self.processed_path = os.path.join(os.path.dirname(self.raw_path),
+                                               os.path.basename(self.raw_path) + '_processed.lmdb')
+            self.name2id_path = os.path.join(os.path.dirname(self.raw_path),
+                                             os.path.basename(self.raw_path) + '_name2id.pt')
+        
         self.transform = transform
         self.db = None
-
         self.keys = None
 
-        if not os.path.exists(self.processed_path):
+        # 只有在非跳过模式且文件不存在时才处理
+        if not skip_process and not raw_path.endswith('.lmdb') and not os.path.exists(self.processed_path):
             self._process()
+            # self._precompute_name2id()
+
+        # 检查处理后的文件是否存在
+        if not os.path.exists(self.processed_path):
+            raise FileNotFoundError(f'LMDB file not found: {self.processed_path}')
             # self._precompute_name2id()
 
         # self.name2id = torch.load(self.name2id_path)

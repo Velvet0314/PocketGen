@@ -1011,7 +1011,8 @@ class GETLayer(Module):
         sparse_mask[rows, depth, height, top_indices] = True
         attend_logits = attend_logits * attend_mask
         attend_logits = attend_logits * sparse_mask
-        return_attend = copy.deepcopy(attend_logits)
+        # return_attend = copy.deepcopy(attend_logits)
+        return_attend = attend_logits.detach().clone()
 
         # calculate beta
         atom_mask_head = atom_mask.unsqueeze(1).repeat(1, self.num_heads, 1)

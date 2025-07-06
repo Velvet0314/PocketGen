@@ -8,3 +8,17 @@ tempignore
 
 */.ipynb_checkpoints/*
 */__pycache__/*
+
+.vscode/
+.idea/
+data/
+wandb/
+logs/
+
+*.zip
+*.tar.gz
+*.tar.gz:Zone.Identifier
+*.csv
+*.pt:Zone.Identifier
+*.pt
+*.lmdb

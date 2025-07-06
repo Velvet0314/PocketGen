@@ -20,7 +20,7 @@ model:
 train:
   multi_gpu: False
   seed: 2024
-  batch_size: 2
+  batch_size: 1
   num_workers: 4
   max_iters: 300_000
   warm_up: 5000
@@ -40,5 +40,5 @@ train:
 
 dataset:
   name: pl
-  path: ./data/crossdocked_v1.1_rmsd1.0_pocket10
-  split: ./data/crossdocked_v1.1_rmsd1.0_pocket10/split.pt
+  path: ./data/crossdocked_pocket10_processed.lmdb
+  split: ./data/crossdocked_split.pt

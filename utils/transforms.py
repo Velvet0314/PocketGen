@@ -9,10 +9,10 @@ import numpy as np
 from copy import deepcopy
 from torch_geometric.transforms import Compose
 from torch_geometric.nn.pool import knn_graph
-from torch_geometric.utils.subgraph import subgraph
+from torch_geometric.utils import subgraph
 from torch_geometric.utils.num_nodes import maybe_num_nodes
 from torch_geometric.data import Data, Batch
-from torch_scatter import scatter_add
+from torch_geometric.utils import scatter
 from rdkit import Chem
 from rdkit.Chem import Descriptors
 from rdkit.Chem import AllChem
@@ -343,7 +343,7 @@ class LigandCountNeighbors(object):
             valence = torch.ones([edge_index.size(1)], device=edge_index.device)
         valence = valence.view(edge_index.size(1))
 
-        return scatter_add(valence, index=edge_index[0], dim=0, dim_size=num_nodes).long()
+        return scatter(valence, index=edge_index[0], dim=0, dim_size=num_nodes).long()
 
     def __init__(self):
         super().__init__()

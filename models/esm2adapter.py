@@ -52,6 +52,8 @@ class ESM2WithStructuralAdatper(nn.Module):
         # args.adapter_layer_indices = getattr(args, 'adapter_layer_indices', [6, 20, 32])
 
         args.adapter_layer_indices = [-1]
+
+        # 负索引转换为正索引
         args.adapter_layer_indices = list(
             map(lambda x: (args.num_layers + x) % args.num_layers,
                 args.adapter_layer_indices)
