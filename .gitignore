@@ -22,3 +22,5 @@ logs/
 *.pt:Zone.Identifier
 *.pt
 *.lmdb
+
+*.env
